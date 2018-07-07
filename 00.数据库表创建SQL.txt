@@ -1,0 +1,24 @@
+USE [EnterpriseAnalysis]
+GO
+
+/****** Object:  Table [dbo].[PositionDetail20180706]    Script Date: 2018/7/7 22:12:58 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[PositionDetail20180706](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[JobName] [nvarchar](50) NULL,
+	[CompanyName] [nvarchar](50) NULL,
+	[EmployeeCount] [int] NULL,
+	[MaxSalaryPerMonth] [nvarchar](50) NULL,
+	[SkillKeyWord] [nvarchar](500) NULL,
+ CONSTRAINT [PK_PositionDetail20180706] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
