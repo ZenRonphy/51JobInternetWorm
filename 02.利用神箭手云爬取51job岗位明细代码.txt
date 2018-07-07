@@ -1,0 +1,54 @@
+var configs = {
+  domains: ["51job.com"], // 网站域名，设置域名后只会处理这些域名下的网页
+  scanUrls: ["https://search.51job.com/list/030200,000000,0000,00,9,99,.net,2,1.html"], // 入口页url，分别从这些网页开始爬取。爬虫默认会自动发现并爬取新网页
+  contentUrlRegexes: [
+      /https:\/\/jobs.51job.com\/(guangzhou\-[a-z]{0,3}|all|guangzhou)\/\d*.html\?s=\d*&t=\d*/
+    ], // 内容页url的正则，符合这些正则的页面会被当作内容页处理
+  helperUrlRegexes: [
+      /https:\/\/search\.51job\.com\/list\/030200,000000,0000,00,9,99,\.net,2,\d+\.html?/
+    ], // 列表页url的正则，符合这些正则的页面会被当作列表页处理
+  fields: [
+    {
+      name: "job_Name",
+      selector: "//div[@class='cn']/h1/@title",
+      required: true // required为true表示该项数据不能为空
+        },
+    {
+      name: "company_name",
+      selector: "//p[@class='cname']/a/@title",
+      required: true
+        },
+    {
+      name: "salary",
+      selector: "//div[@class='cn']/strong",
+      required: true
+      },
+    {
+      name:"company_detail",
+      selector : "//p[@class='msg ltype']",
+      required : true
+    },
+    {
+      name: "job_detail",
+      selector: "//div[contains(@class,'bmsg job_msg inbox')]",
+      required: true
+        }
+    ]
+};
+
+/*
+  回调函数afterExtractField：对抽取出来的数据进行处理
+*/
+configs.afterExtractField = function(fieldName, data, page, site) {
+  if (fieldName == "article_publish_time") {
+    var timestamp = Date.parse(data);
+    return isNaN(timestamp) ? 0 : parseInt(timestamp / 1000); // 抽取的发布日期转换成时间戳
+    // 使用神箭手发布数据到CMS网站时，CMS网站默认处理的时间戳是10位。所以如非特殊，请转换成10位时间戳
+  }
+  return data;
+};
+
+// 使用以上配置创建一个爬虫对象
+var crawler = new Crawler(configs);
+// 启动该爬虫
+crawler.start();
